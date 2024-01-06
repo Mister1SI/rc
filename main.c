@@ -48,11 +48,20 @@ int main(int argc, char* argv[]) {
 	
 	bool sl = false;
 	bool ml = false;
+	bool star = false;
 
 	for(long i = 0; i < filesize; i++) {
-		char a = *(filebuf + i);
+		char* z = filebuf;
+		char* y = z + i;
+		char a = *y;
+		if(star) {
+			if(a == '/') {
+				ml =false;
 
-		if(sl) {
+			}
+			star = false;
+		}
+		else if(sl) {
 			if(a == '\n') {
 				sl = false;
 			} else {
@@ -60,7 +69,9 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		else if(ml) {
-
+			if(a == '*') {
+				star = true;
+			}
 		}
 		else if(a == '/') {
 			if(a == '/') {
@@ -69,6 +80,7 @@ int main(int argc, char* argv[]) {
 			}
 			else if(a == '*') {
 				// Multi-line comment, continue until */
+				ml = true;
 			}
 			else {
 				// Not a comment, ignore

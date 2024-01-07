@@ -8,7 +8,7 @@
 
 #include <preproccessor.h>
 
-char* preproccessor(char* filename, char* new_filename) {
+int preproccessor(char* filename, char* new_filename) {
 	int filename_size = strlen(filename);
 	int new_filename_size = strlen(new_filename);
 	
@@ -40,13 +40,22 @@ char* preproccessor(char* filename, char* new_filename) {
 	read(fd, filebuf, filesize);
 	close(fd);
 
+	// Data for the new file
 	char* new_filebuf = malloc(filesize);
 	long new_filesize = filesize;
 	int new_i = 0;
 
+	
 	bool sl = false;
 	bool ml = false;
 	bool star = false;
+
+
+	// This for loop checks each character of the input file.
+	// If it doesn't find a comment, it writes the character to
+	// the new filebuffer. If it does, it skips that character
+	// and reduces the final size of the new file.
+
 
 	for(long i = 0; i < filesize; i++) {
 		if(star) {
@@ -56,6 +65,7 @@ char* preproccessor(char* filename, char* new_filename) {
 			}
 			star = false;
 		}
+		// A SL comment was detected in a previous cycle
 		else if(sl) {
 			if(filebuf[i] == '\n') {
 				sl = false;
@@ -65,20 +75,33 @@ char* preproccessor(char* filename, char* new_filename) {
 				new_filesize--;
 			}
 		}
+		// A ML comment is currently being proccessed
 		else if(ml) {
 			if(filebuf[i] == '*') {
-				star = true;
+				// check if the ML comment is terminated
+				if(filebuf[i+1] == '/') {
+					ml = false;
+					new_filesize -= 2;
+					i++;
+				}
+			}
+			else {
+				new_filesize--;
 			}
 		}
 		else if(filebuf[i] == '/') {
+			
+			// A '/' was detected, possible start of a comment
+
 			if(filebuf[i+1] == '/') {
 				// Single-line comment, continue to the end of the line
 				sl = true;
 				new_filesize--;
 			}
-			else if(filebuf[i] == '*') {
+			else if(filebuf[i+1] == '*') {
 				// Multi-line comment, continue until */
 				ml = true;
+				new_filesize--;
 			}
 		}
 		else {

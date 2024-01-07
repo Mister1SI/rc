@@ -10,8 +10,13 @@ int main(int argc, char* argv[]) {
 	char* filename = argv[1];
 	char* new_filename = argv[2];
 
-	preproccessor(filename, new_filename);
-	
+	int preproccessor_result = preproccessor(filename, new_filename);
+	if(preproccessor_result != 0) {
+		char* msg = "Preproccessor Error\n";
+		write(1, msg, 20);
+		return 1;
+	}
+
 	return 0;
 }
 

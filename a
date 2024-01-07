@@ -1,7 +1,16 @@
-This is test text //This is a test comment
-more text
-thisd is teewdhsu
-aerg //weyuftgy7uwegfywegy7uf
-werfgaerg
+If you can		// if you can 
+read this text	// read this
+then the 		// then it
+preproccessor 	// is
+is working		// not working
+correctly!		// right
 
-
+/*
+This is a test of
+the ML-comment
+ability of the
+preproccessor
+You shouldn't see
+this text
+*/
+Woohoo!

@@ -51,34 +51,32 @@ int main(int argc, char* argv[]) {
 	bool star = false;
 
 	for(long i = 0; i < filesize; i++) {
-		char* z = filebuf;
-		char* y = z + i;
-		char a = *y;
 		if(star) {
-			if(a == '/') {
+			if(filebuf[i] == '/') {
 				ml =false;
 
 			}
 			star = false;
 		}
 		else if(sl) {
-			if(a == '\n') {
+			if(filebuf[i] == '\n') {
 				sl = false;
 			} else {
-				a = 'e';
+				filebuf[i] = 'e';
 			}
 		}
 		else if(ml) {
-			if(a == '*') {
+			if(filebuf[i] == '*') {
 				star = true;
 			}
 		}
-		else if(a == '/') {
-			if(a == '/') {
+		else if(filebuf[i] == '/') {
+			if(filebuf[i+1] == '/') {
 				// Single-line comment, continue to the end of the line
 				sl = true;
+				filebuf[i] = 'e';
 			}
-			else if(a == '*') {
+			else if(filebuf[i] == '*') {
 				// Multi-line comment, continue until */
 				ml = true;
 			}

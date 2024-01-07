@@ -6,18 +6,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-int main(int argc, char* argv[]) {
-	if(argc < 3) {
-		char* msg = "Please supply at least 2 arguments\n";
-		write(1, msg, 35);
-		return 1;
-	}
-	char* filename = argv[1];
-	size_t filename_size = strlen(filename);
-	
-	char* new_filename = argv[2];
-	size_t new_filename_size = strlen(new_filename);
+#include <preproccessor.h>
 
+char* preproccessor(char* filename, char* new_filename) {
+	int filename_size = strlen(filename);
+	int new_filename_size = strlen(new_filename);
+	
 	int fd = open(filename, O_RDWR, 00644);
 	if(fd == -1) {
 		char* msg = "Failed to open file ";

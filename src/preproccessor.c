@@ -45,7 +45,11 @@ int main(int argc, char* argv[]) {
 	char* filebuf = malloc(filesize);
 	read(fd, filebuf, filesize);
 	close(fd);
-	
+
+	char* new_filebuf = malloc(filesize);
+	long new_filesize = filesize;
+	int new_i = 0;
+
 	bool sl = false;
 	bool ml = false;
 	bool star = false;
@@ -61,8 +65,10 @@ int main(int argc, char* argv[]) {
 		else if(sl) {
 			if(filebuf[i] == '\n') {
 				sl = false;
+				new_filebuf[new_i] = filebuf[i];
+				new_i++;
 			} else {
-				filebuf[i] = 'e';
+				new_filesize--;
 			}
 		}
 		else if(ml) {
@@ -74,19 +80,22 @@ int main(int argc, char* argv[]) {
 			if(filebuf[i+1] == '/') {
 				// Single-line comment, continue to the end of the line
 				sl = true;
-				filebuf[i] = 'e';
+				new_filesize--;
 			}
 			else if(filebuf[i] == '*') {
 				// Multi-line comment, continue until */
 				ml = true;
 			}
-			else {
-				// Not a comment, ignore
-			}
+		}
+		else {
+			// Not a comment, write to new filebuffer
+			new_filebuf[new_i] = filebuf[i];
+			new_i++;
+
 		}
 	}
 
-	write(new_fd, filebuf, filesize);
+	write(new_fd, new_filebuf, new_filesize);
 	close(new_fd);
 
 	return 0;
